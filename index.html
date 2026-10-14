@@ -1,0 +1,271 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>CraftNest - Online Craft Store</title>
+
+    <!-- jQuery Library -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #fff8f0;
+            color: #4a3025;
+            margin: 0;
+        }
+
+        header {
+            background-color: #8b5e3c;
+            color: white;
+            text-align: center;
+            padding: 25px;
+        }
+
+        nav {
+            background-color: #5e3d2e;
+            padding: 15px;
+            text-align: center;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            margin: 15px;
+            font-weight: bold;
+        }
+
+        section {
+            text-align: center;
+            padding: 25px;
+        }
+
+        button {
+            background-color: #8b5e3c;
+            color: white;
+            border: none;
+            padding: 10px 16px;
+            margin: 6px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #5e3d2e;
+        }
+
+        input {
+            padding: 8px;
+            margin: 5px;
+            width: 150px;
+        }
+
+        .products {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .card {
+            background-color: white;
+            width: 200px;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 3px 8px #cccccc;
+        }
+
+        .craft-icon {
+            font-size: 45px;
+        }
+
+        .price {
+            color: #b35c1e;
+            font-weight: bold;
+        }
+
+        #offer {
+            background-color: #f6d7b0;
+            padding: 15px;
+            border-radius: 8px;
+        }
+
+        #result {
+            font-weight: bold;
+            font-size: 20px;
+        }
+
+        #craftList p {
+            background-color: white;
+            padding: 12px;
+            margin: 10px auto;
+            max-width: 400px;
+            border-radius: 6px;
+        }
+
+        footer {
+            background-color: #5e3d2e;
+            color: white;
+            text-align: center;
+            padding: 20px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <h1>🧶 CraftNest</h1>
+        <p>Your Online Handmade Craft Store</p>
+    </header>
+
+    <nav>
+        <a href="#home">Home</a>
+        <a href="#products">Products</a>
+        <a href="#calculator">Order Calculator</a>
+        <a href="#newCrafts">New Crafts</a>
+    </nav>
+
+    <!-- Home Section -->
+    <section id="home">
+        <h2>Welcome to CraftNest!</h2>
+        <p>Discover beautiful handmade crafts created with love.</p>
+
+        <p id="offer">
+            🎁 Special Offer! Get 10% off handmade crafts!
+        </p>
+
+        <button id="hideBtn">Hide Offer</button>
+        <button id="showBtn">Show Offer</button>
+        <button id="styleBtn">Change Offer Style</button>
+    </section>
+
+    <!-- Products Section -->
+    <section id="products">
+        <h2>Our Handmade Crafts</h2>
+
+        <div class="products">
+
+            <div class="card">
+                <div class="craft-icon">🧶</div>
+                <h3>Wool Basket</h3>
+                <p>Beautiful handmade basket.</p>
+                <p class="price">₹450</p>
+            </div>
+
+            <div class="card">
+                <div class="craft-icon">🕯️</div>
+                <h3>Handmade Candle</h3>
+                <p>Decorative scented candle.</p>
+                <p class="price">₹250</p>
+            </div>
+
+            <div class="card">
+                <div class="craft-icon">🎨</div>
+                <h3>Canvas Painting</h3>
+                <p>Unique handmade artwork.</p>
+                <p class="price">₹850</p>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Order Calculator -->
+    <section id="calculator">
+        <h2>Craft Order Calculator</h2>
+
+        <label for="price">Price per craft (₹):</label>
+        <input type="number" id="price" value="250" min="0">
+
+        <br><br>
+
+        <label for="quantity">Quantity:</label>
+        <input type="number" id="quantity" value="1" min="1">
+
+        <br><br>
+
+        <button id="calculateBtn">Calculate Total</button>
+
+        <p id="result"></p>
+    </section>
+
+    <!-- Dynamically Added Crafts -->
+    <section id="newCrafts">
+        <h2>Discover More Crafts</h2>
+
+        <button id="addCraftBtn">Add New Craft</button>
+
+        <div id="craftList"></div>
+    </section>
+
+    <!-- jQuery Actions -->
+    <script>
+        $(document).ready(function() {
+
+            // 1. Hide the offer
+            $("#hideBtn").click(function() {
+                $("#offer").hide();
+            });
+
+            // 2. Show the offer
+            $("#showBtn").click(function() {
+                $("#offer").show();
+            });
+
+            // 3. Change the offer style
+            $("#styleBtn").click(function() {
+                $("#offer").css({
+                    "color": "white",
+                    "background-color": "#8b5e3c",
+                    "font-size": "22px",
+                    "padding": "20px"
+                });
+            });
+
+            // 4. Calculate the craft order total
+            $("#calculateBtn").click(function() {
+
+                let price = Number($("#price").val());
+                let quantity = Number($("#quantity").val());
+
+                if (
+                    $("#price").val() === "" ||
+                    $("#quantity").val() === "" ||
+                    price < 0 ||
+                    quantity < 1 ||
+                    !Number.isFinite(price) ||
+                    !Number.isFinite(quantity)
+                ) {
+                    $("#result").html("Please enter a valid price and quantity.");
+                } else {
+                    let total = price * quantity;
+
+                    $("#result").html("Total Amount: ₹" + total);
+                }
+            });
+
+            // 5. Add a new craft dynamically
+            $("#addCraftBtn").click(function() {
+                $("#craftList").append(
+                    "<p>🧶 Handmade Wool Basket - ₹450</p>"
+                );
+            });
+
+            // 6. Fade out and fade in the offer
+            $("#offer").click(function() {
+                $(this).fadeOut(500).fadeIn(500);
+            });
+
+        });
+    </script>
+
+    <footer>
+        <p>© 2026 CraftNest - Online Handmade Craft Store</p>
+        <p>Created using HTML, CSS and jQuery</p>
+    </footer>
+
+</body>
+</html>
